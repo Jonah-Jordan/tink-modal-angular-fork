@@ -1,6 +1,6 @@
 # Tink modal Angular directive
 
-v1.0.0
+v1.0.1
 
 ## What is this repository for?
 
@@ -26,6 +26,10 @@ Tink is an in-house developed easy-to-use front-end framework for quick prototyp
   `<link rel="stylesheet" href="bower_components/tink-core/dist/tink.css" />` (or one of the Tink themes)
 
   `<script src="bower_components/tink-modal-angular/dist/tink-modal-angular.js"></script>`
+
+3. Add `tink.modal` to your app module's dependency.
+
+  `angular.module('myApp', ['tink.modal']);`
 
 
 ----------
