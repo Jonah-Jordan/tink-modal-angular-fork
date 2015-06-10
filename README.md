@@ -1,6 +1,6 @@
 # Tink modal Angular directive
 
-v1.0.1
+v1.0.2
 
 ## What is this repository for?
 
@@ -23,23 +23,23 @@ Tink is an in-house developed easy-to-use front-end framework for quick prototyp
 
 2. Add the following files to your project:
 
-  `<link rel="stylesheet" href="bower_components/tink-core/dist/tink.css" />` (or one of the Tink themes)
+   `<link rel="stylesheet" href="bower_components/tink-core/dist/tink.css" />` (or one of the Tink themes)
 
-  `<script src="bower_components/tink-modal-angular/dist/tink-modal-angular.js"></script>`
+   `<script src="bower_components/tink-modal-angular/dist/tink-modal-angular.js"></script>`
 
 3. Add `tink.modal` to your app module's dependency.
 
-  `angular.module('myApp', ['tink.modal']);`
+   `angular.module('myApp', ['tink.modal']);`
+
 
 
 ----------
 
 
+
 ## How to use
 
 ### modalCtrl
-
-### Component
 
 For a somewhat more extended modal, you can use a separate HTML template for the content of the modal and an Angular controller to call the modal dialog.
 
@@ -69,33 +69,6 @@ angular.module('tinkApp')
   }]);
 ```
 
-### Options
-
-Attr | Type | Default | Details
---- | --- | --- | ---
-data-template-url | `string` | `''` | The template url you want to use for the modal.
-data-controller | `string` | `''` | The controller you want to inject in the modal
-data-resolve | `object` | `null` | An object with data you want to inject into the controller of the modal.
-
-###Examples
-
-###### Button code: ######
-
-```html
-<button data-ng-click="openModal()">How does the internet work?</button>
-```
-
-###### An example of the content inside modal-template.html`: ######
-
-```html
-<div data-ng-controller="ModalInstanceCtrl">
-  <h3>Modal title</h3>
-  <p>Modal text</p>
-  <button data-ng-click="ok()">Dismiss</button>
-  <button data-ng-click="cancel()">Close</button>
-</div>
-```
-
 ###### Optionally, your modal template can also have an Angular controller: ######
 
 ```html
@@ -113,14 +86,38 @@ angular.module('tinkApp')
   }]);
 ```
 
+###### Button code: ######
+
+```html
+<button data-ng-click="openModal()">How does the internet work?</button>
+```
+
+###### Possible content inside `modal-template.html`: ######
+
+```html
+<div data-ng-controller="ModalInstanceCtrl">
+  <h3>Modal title</h3>
+  <p>Modal text</p>
+  <button data-ng-click="ok()">Dismiss</button>
+  <button data-ng-click="cancel()">Close</button>
+</div>
+```
+
+### Options
+
+Attr | Type | Default | Details
+--- | --- | --- | ---
+data-template-url | `string` | `''` | The template url you want to use for the modal.
+data-controller | `string` | `''` | The controller you want to inject in the modal
+data-resolve | `object` | `null` | An object with data you want to inject into the controller of the modal.
+
+
 
 ----------
 
 
 
 ### tink-modal
-
-### Component
 
 While it is better practice to use an external template for your modal dialog, in certain cases it's better to reference one that's already in the DOM. If this is the case, wrap your modal content within `script tags and refer to this script template via its `id`.
 
@@ -138,16 +135,6 @@ While it is better practice to use an external template for your modal dialog, i
 </script>
 ```
 
-### Options
-
-Attr | Type | Default | Details
---- | --- | --- | ---
-tink-modal-template | `string` | `''` | The ID of the script you're referencing.
-tink-modal-success | `function` | `null` | Callback function on success.
-tink-modal-dismiss | `function` | `null` | Callback function on dismiss.
-
-###Example
-
 ###### Possible modal content: ######
 
 ```html
@@ -156,6 +143,18 @@ tink-modal-dismiss | `function` | `null` | Callback function on dismiss.
 <button data-ng-click="$dismiss('close')">Dismiss</button>
 <button data-ng-click="$close('close')">Close</button>
 ```
+
+### Options
+
+Attr | Type | Default | Details
+--- | --- | --- | ---
+tink-modal-template | `string` | `''` | The ID of the script you're referencing.
+tink-modal-success | `function` | `null` | Callback function on success.
+tink-modal-dismiss | `function` | `null` | Callback function on dismiss.
+
+### Example
+
+A working example can be found in [the Tink documentation](http://tink.digipolis.be/#/docs/directives/modal#example).
 
 ## Contribution guidelines
 
