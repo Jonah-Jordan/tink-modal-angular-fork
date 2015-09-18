@@ -64,64 +64,63 @@
 
           //Create an instance for the modal
           var modalInstance = {
-              result: modalResultDeferred.promise,
-              opened: modalOpenedDeferred.promise,
-              close: function (result) {
-                leaveModal(null).then(function(){
-                  modalResultDeferred.resolve(result);
-                });
-              },
-              dismiss: function (reason) {
-                leaveModal(null).then(function(){
-                  modalResultDeferred.reject(reason);
-                });
-              }
-            };
+            result: modalResultDeferred.promise,
+            opened: modalOpenedDeferred.promise,
+            close: function (result) {
+              leaveModal(null).then(function(){
+                modalResultDeferred.resolve(result);
+              });
+            },
+            dismiss: function (reason) {
+              leaveModal(null).then(function(){
+                modalResultDeferred.reject(reason);
+              });
+            }
+          };
 
-            var resolveIter = 1;
+          var resolveIter = 1;
 
-            //config variable
-            config = angular.extend({}, defaults, config);
-            config.resolve = config.resolve || {};
-            var templateAndResolvePromise;
-            if(angular.isDefined(config.templateUrl)){
-              templateAndResolvePromise = $q.all([fetchTemplate(config.templateUrl)].concat(fetchResolvePromises(config.resolve)));
-            }else{
-              templateAndResolvePromise = $q.all([config.template].concat(fetchResolvePromises(config.resolve)));
+          //config variable
+          config = angular.extend({}, defaults, config);
+          config.resolve = config.resolve || {};
+          var templateAndResolvePromise;
+          if(angular.isDefined(config.templateUrl)){
+            templateAndResolvePromise = $q.all([fetchTemplate(config.templateUrl)].concat(fetchResolvePromises(config.resolve)));
+          }else{
+            templateAndResolvePromise = $q.all([config.template].concat(fetchResolvePromises(config.resolve)));
+          }
+
+          //Wacht op de template en de resloved variable
+
+          templateAndResolvePromise.then(function success(tplAndVars){
+            //Get the modal scope or create one
+            var modalScope = (config.scope || $rootScope).$new();
+            //add the close and dismiss to to the scope
+            modalScope.$close = modalInstance.close;
+            modalScope.$dismiss = modalInstance.dismiss;
+
+            var ctrlInstance,ctrlConstant={};
+            ctrlConstant.$scope = modalScope;
+            ctrlConstant.$modalInstance = modalScope;
+            angular.forEach(config.resolve, function (value, key) {
+                ctrlConstant[key] = tplAndVars[resolveIter++];
+            });
+            if (config.controller) {
+              ctrlInstance = $controller(config.controller, ctrlConstant);
+            }
+            if (config.controllerAs) {
+                modalScope[config.controllerAs] = ctrlInstance;
             }
 
-            //Wacht op de template en de resloved variable
-
-
-            templateAndResolvePromise.then(function success(tplAndVars){
-              //Get the modal scope or create one
-              var modalScope = (config.scope || $rootScope).$new();
-              //add the close and dismiss to to the scope
-              modalScope.$close = modalInstance.close;
-              modalScope.$dismiss = modalInstance.dismiss;
-
-              var ctrlInstance,ctrlConstant={};
-              ctrlConstant.$scope = modalScope;
-              ctrlConstant.$modalInstance = modalScope;
-              angular.forEach(config.resolve, function (value, key) {
-                  ctrlConstant[key] = tplAndVars[resolveIter++];
-              });
-              if (config.controller) {
-                ctrlInstance = $controller(config.controller, ctrlConstant);
-              }
-              if (config.controllerAs) {
-                  modalScope[config.controllerAs] = ctrlInstance;
-              }
-
-              enterModal(modalInstance,{
-                scope:modalScope,
-                content: tplAndVars[0],
-                windowTemplateUrl: config.template
-              });
+            enterModal(modalInstance,{
+              scope:modalScope,
+              content: tplAndVars[0],
+              windowTemplateUrl: config.template
             });
+          });
 
-              return modalInstance;
-          };
+          return modalInstance;
+        };
 
         function createModalWindow(content){
           var modelView = angular.element('<div class="modal" tabindex="-1" role="dialog">'+

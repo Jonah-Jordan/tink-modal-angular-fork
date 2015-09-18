@@ -13,7 +13,15 @@
 <body>
 
 <script type="text/ng-template" id="contentTemp.html">
-  dit is loaded content
+  <h2 class="h4">Bedrijfseenheid aanpassen</h2>
+  <div class="form-group">
+    <label for="input-name">Naam</label>
+    <input type="text" id="input-name" placeholder="Voornaam / Achternaam">
+  </div>
+  <div class="form-group">
+    <label for="input-code">Code</label>
+    <input type="text" id="input-code" placeholder="XXXX">
+  </div>
   <div ng-repeat="la in ctrl.klanten">{{la}}</div>
   <button data-ng-click="$dismiss('cloes')">dism</button>
   <button data-ng-click="$close('cloes')">close</button>
@@ -43,14 +51,7 @@ app.controller('ctrlo',function($scope,$modal){
   $scope.openModal = function() {
 
       var modalInstance = $modal.open({
-        templateUrl: 'contentTemp.html',
-        controller: 'ModalInstanceCtrl',
-        controllerAs:'ctrl',
-        resolve: {
-          items: function() {
-            return ['test Array'];
-          }
-        }
+        templateUrl: 'contentTemp.html'
       });
 
       modalInstance.result.then(function(obj) {
