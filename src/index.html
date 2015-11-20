@@ -49,9 +49,17 @@
 var app = angular.module('app',['tink.modal']);
 app.controller('ctrlo',function($scope,$modal){
   $scope.openModal = function() {
-
+$scope.items = ['lol']
       var modalInstance = $modal.open({
-        templateUrl: 'contentTemp.html'
+        templateUrl: 'contentTemp.html',
+        controller:'ModalInstanceCtrl',
+        controllerAs:'ctrl',
+        resolve: {
+          items: function () {
+            return $scope.items;
+          },
+          test:'oke'
+        }
       });
 
       modalInstance.result.then(function(obj) {
@@ -61,10 +69,10 @@ app.controller('ctrlo',function($scope,$modal){
       });
     }
 });
-app.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', function($scope, $modalInstance) {console.log("f")
+app.controller('ModalInstanceCtrl', ['$scope', '$modalInstance','items','test', function($scope, $modalInstance,items,test) {console.log("f")
   var ctrl = this;
   ctrl.klanten = {'1':0,'2':1};
-  console.log($scope);
+  console.log($scope,items);
     $scope.ok = function() {
       $modalInstance.$close('ok is pressed'); // To close the controller with a success message
     }
