@@ -35,7 +35,7 @@
             if (angular.isFunction(value)) {
               promisesArr.push($q.when($injector.invoke(value)));
             }else{
-              promisesArr.push($q.when(value))
+              promisesArr.push($q.when(value));
             }
           });
           return promisesArr;

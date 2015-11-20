@@ -49,7 +49,7 @@
 var app = angular.module('app',['tink.modal']);
 app.controller('ctrlo',function($scope,$modal){
   $scope.openModal = function() {
-$scope.items = ['lol']
+      $scope.items = ['item 1','item 2','item 3']
       var modalInstance = $modal.open({
         templateUrl: 'contentTemp.html',
         controller:'ModalInstanceCtrl',
@@ -58,7 +58,7 @@ $scope.items = ['lol']
           items: function () {
             return $scope.items;
           },
-          test:$scope.items
+          test: 'test'
         }
       });
 
