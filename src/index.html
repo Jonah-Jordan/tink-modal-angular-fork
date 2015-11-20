@@ -58,7 +58,7 @@ $scope.items = ['lol']
           items: function () {
             return $scope.items;
           },
-          test:'oke'
+          test:$scope.items
         }
       });
 
@@ -69,10 +69,10 @@ $scope.items = ['lol']
       });
     }
 });
-app.controller('ModalInstanceCtrl', ['$scope', '$modalInstance','items','test', function($scope, $modalInstance,items,test) {console.log("f")
+app.controller('ModalInstanceCtrl', ['$scope', '$modalInstance','items','test', function($scope, $modalInstance,items,test) {
   var ctrl = this;
   ctrl.klanten = {'1':0,'2':1};
-  console.log($scope,items);
+  console.log(items,test);
     $scope.ok = function() {
       $modalInstance.$close('ok is pressed'); // To close the controller with a success message
     }

@@ -32,7 +32,7 @@
         function fetchResolvePromises(resolves) {
           var promisesArr = [];
           angular.forEach(resolves, function (value) {
-            if (angular.isFunction(value) || angular.isArray(value)) {
+            if (angular.isFunction(value)) {
               promisesArr.push($q.when($injector.invoke(value)));
             }else{
               promisesArr.push($q.when(value))
