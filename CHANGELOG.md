@@ -14,6 +14,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 -->
 
+## [1.0.4] - 2015-12-03
+
+### Added
+- added backdrop
+
 ## [1.0.3] - 2015-07-29
 
 ### Changed

@@ -1,49 +1,50 @@
-'use strict';
-(function(module) {
-  try {
-    module = angular.module('tink.modal');
-  } catch (e) {
-    module = angular.module('tink.modal', []);
-  }
-  module.directive('tinkModal',['$modal',function($modal){
-    return{
-      restrict:'A',
-      scope:{
-        tinkModalSuccess:'=',
-        tinkModalDismiss:'='
-      },
-      link:function(scope,element,attr){
-        if(!attr.tinkModalTemplate){
-          return;
-        }
+// 'use strict';
+// (function(module) {
+//   try {
+//     module = angular.module('tink.modal');
+//   } catch (e) {
+//     module = angular.module('tink.modal', []);
+//   }
+//   module.directive('tinkModal',['$modal',function($modal){
+//     return{
+//       restrict:'A',
+//       scope:{
+//         tinkModalSuccess:'=',
+//         tinkModalDismiss:'='
+//       },
+//       link:function(scope,element,attr){
+//         if(!attr.tinkModalTemplate){
+//           return;
+//         }
 
-        element.bind('click',function(){
-          scope.$apply(function(){
-            openModal(attr.tinkModalTemplate);
-          });
-        });
+//         element.bind('click',function(){
+//           console.log(1);
+//           scope.$apply(function(){
+//             openModal(attr.tinkModalTemplate);
+//           });
+//         });
 
-        function openModal(template){
-          var modalInstance = $modal.open({
-            templateUrl: template
-          });
+//         function openModal(template){
+//           var modalInstance = $modal.open({
+//             templateUrl: template
+//           });
 
-          if(scope.tinkModalSucces !== undefined && typeof scope.tinkModalSuccess !== 'function'){
-            scope.tinkModalSuccess = null;
-          }
+//           if(scope.tinkModalSucces !== undefined && typeof scope.tinkModalSuccess !== 'function'){
+//             scope.tinkModalSuccess = null;
+//           }
 
-          if(scope.tinkModalDismiss !== undefined && typeof scope.tinkModalDismiss !== 'function'){
-            scope.tinkModalDismiss = null;
-          }
+//           if(scope.tinkModalDismiss !== undefined && typeof scope.tinkModalDismiss !== 'function'){
+//             scope.tinkModalDismiss = null;
+//           }
 
-          modalInstance.result.then(scope.tinkModalSuccess,scope.tinkModalDismiss);
-        }
+//           modalInstance.result.then(scope.tinkModalSuccess,scope.tinkModalDismiss);
+//         }
 
 
-      }
-    };
-  }]);
-})();;'use strict';
+//       }
+//     };
+//   }]);
+// })();;'use strict';
 (function(module) {
   try {
     module = angular.module('tink.modal');
@@ -53,6 +54,7 @@
   module.provider('$modal', function() {
     var defaults = this.defaults = {
       element:null,
+      backdrop:true
     };
 
     var openInstance = null;
@@ -77,8 +79,10 @@
         function fetchResolvePromises(resolves) {
           var promisesArr = [];
           angular.forEach(resolves, function (value) {
-            if (angular.isFunction(value) || angular.isArray(value)) {
+            if (angular.isFunction(value)) {
               promisesArr.push($q.when($injector.invoke(value)));
+            }else{
+              promisesArr.push($q.when(value));
             }
           });
           return promisesArr;
@@ -109,64 +113,63 @@
 
           //Create an instance for the modal
           var modalInstance = {
-              result: modalResultDeferred.promise,
-              opened: modalOpenedDeferred.promise,
-              close: function (result) {
-                leaveModal(null).then(function(){
-                  modalResultDeferred.resolve(result);
-                });
-              },
-              dismiss: function (reason) {
-                leaveModal(null).then(function(){
-                  modalResultDeferred.reject(reason);
-                });
-              }
-            };
+            result: modalResultDeferred.promise,
+            opened: modalOpenedDeferred.promise,
+            close: function (result) {
+              leaveModal(null).then(function(){
+                modalResultDeferred.resolve(result);
+              });
+            },
+            dismiss: function (reason) {
+              leaveModal(null).then(function(){
+                modalResultDeferred.reject(reason);
+              });
+            }
+          };
 
-            var resolveIter = 1;
+          var resolveIter = 1;
 
-            //config variable
-            config = angular.extend({}, defaults, config);
-            config.resolve = config.resolve || {};
-            var templateAndResolvePromise;
-            if(angular.isDefined(config.templateUrl)){
-              templateAndResolvePromise = $q.all([fetchTemplate(config.templateUrl)].concat(fetchResolvePromises(config.resolve)));
-            }else{
-              templateAndResolvePromise = $q.all([config.template].concat(fetchResolvePromises(config.resolve)));
+          //config variable
+          config = defaults = angular.extend({}, defaults, config);
+          config.resolve = config.resolve || {};
+          var templateAndResolvePromise;
+          if(angular.isDefined(config.templateUrl)){
+            templateAndResolvePromise = $q.all([fetchTemplate(config.templateUrl)].concat(fetchResolvePromises(config.resolve)));
+          }else{
+            templateAndResolvePromise = $q.all([config.template].concat(fetchResolvePromises(config.resolve)));
+          }
+
+          //Wacht op de template en de resloved variable
+
+          templateAndResolvePromise.then(function success(tplAndVars){
+            //Get the modal scope or create one
+            var modalScope = (config.scope || $rootScope).$new();
+            //add the close and dismiss to to the scope
+            modalScope.$close = modalInstance.close;
+            modalScope.$dismiss = modalInstance.dismiss;
+
+            var ctrlInstance,ctrlConstant={};
+            ctrlConstant.$scope = modalScope;
+            ctrlConstant.$modalInstance = modalScope;
+            angular.forEach(config.resolve, function (value, key) {
+                ctrlConstant[key] = tplAndVars[resolveIter++];
+            });
+            if (config.controller) {
+              ctrlInstance = $controller(config.controller, ctrlConstant);
+            }
+            if (config.controllerAs) {
+                modalScope[config.controllerAs] = ctrlInstance;
             }
 
-            //Wacht op de template en de resloved variable
-
-
-            templateAndResolvePromise.then(function success(tplAndVars){
-              //Get the modal scope or create one
-              var modalScope = (config.scope || $rootScope).$new();
-              //add the close and dismiss to to the scope
-              modalScope.$close = modalInstance.close;
-              modalScope.$dismiss = modalInstance.dismiss;
-
-              var ctrlInstance,ctrlConstant={};
-              ctrlConstant.$scope = modalScope;
-              ctrlConstant.$modalInstance = modalScope;
-              angular.forEach(config.resolve, function (value, key) {
-                  ctrlConstant[key] = tplAndVars[resolveIter++];
-              });
-              if (config.controller) {
-                ctrlInstance = $controller(config.controller, ctrlConstant);
-              }
-              if (config.controllerAs) {
-                  modalScope[config.controllerAs] = ctrlInstance;
-              }
-
-              enterModal(modalInstance,{
-                scope:modalScope,
-                content: tplAndVars[0],
-                windowTemplateUrl: config.template
-              });
+            enterModal(modalInstance,{
+              scope:modalScope,
+              content: tplAndVars[0],
+              windowTemplateUrl: config.template
             });
+          });
 
-              return modalInstance;
-          };
+          return modalInstance;
+        };
 
         function createModalWindow(content){
           var modelView = angular.element('<div class="modal" tabindex="-1" role="dialog">'+
@@ -198,7 +201,9 @@
               var view = $(this);
               instance.scope.$apply(function(){
                 if(e.target === view.get(0)){
-                  model.dismiss('backdrop');
+                  if(defaults.backdrop){
+                    model.dismiss('backdrop');
+                  }                  
                 }
               });
             });
