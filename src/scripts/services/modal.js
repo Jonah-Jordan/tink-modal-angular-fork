@@ -8,6 +8,7 @@
   module.provider('$modal', function() {
     var defaults = this.defaults = {
       element:null,
+      backdrop:true
     };
 
     var openInstance = null;
@@ -83,7 +84,7 @@
           var resolveIter = 1;
 
           //config variable
-          config = angular.extend({}, defaults, config);
+          config = defaults = angular.extend({}, defaults, config);
           config.resolve = config.resolve || {};
           var templateAndResolvePromise;
           if(angular.isDefined(config.templateUrl)){
@@ -154,7 +155,9 @@
               var view = $(this);
               instance.scope.$apply(function(){
                 if(e.target === view.get(0)){
-                  model.dismiss('backdrop');
+                  if(defaults.backdrop){
+                    model.dismiss('backdrop');
+                  }                  
                 }
               });
             });
