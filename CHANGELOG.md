@@ -14,15 +14,29 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 -->
 
+
+
+## [2.0.0] - 2016-01-29
+
+### Changed
+- Changed the way the modal can be dismissed with the esc key and by clicking aside
+- Updated documentation
+
+
+
 ## [1.0.4] - 2015-12-03
 
 ### Added
-- added backdrop
+- Added backdrop
+
+
 
 ## [1.0.3] - 2015-07-29
 
 ### Changed
-- changed angular version to 1.4.3
+- Changed angular version to 1.4.3
+
+
 
 ## [1.0.2] - 2015-06-10
 

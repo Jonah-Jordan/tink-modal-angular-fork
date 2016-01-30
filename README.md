@@ -55,7 +55,9 @@ angular.module('tinkApp')
         resolve: {
           items: function() {
             return ['test Array'];
-          }
+          },
+          dismissByClickAside: true,
+          dismissByKeyboard: true
         }
       });
 
@@ -108,8 +110,10 @@ angular.module('tinkApp')
 Attr | Type | Default | Details
 --- | --- | --- | ---
 data-template-url | `string` | `''` | The template url you want to use for the modal.
-data-controller | `string` | `''` | The controller you want to inject in the modal
+data-controller | `string` | `''` | The controller you want to inject in the modal.
 data-resolve | `object` | `null` | An object with data you want to inject into the controller of the modal.
+data-dismiss-by-click-aside | `boolean` | `false` | A boolean to dismiss the modal by clickin aside.
+data-dismiss-by-keyboard | `boolean` | `false` | A boolean to dismiss the modal by pressing the esc key.
 
 
 
