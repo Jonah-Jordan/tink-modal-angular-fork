@@ -7,10 +7,9 @@
   }
   module.provider('$modal', function() {
     var defaults = this.defaults = {
-      element:null,
-      backdrop:true,
-      clickAside: false,
-      keyboard:false
+      element: null,
+      backdrop: false,
+      keyboard: true
     };
 
     var openInstance = null;
@@ -88,8 +87,17 @@
           //config variable
           config = defaults = angular.extend({}, defaults, config);
           config.resolve = config.resolve || {};
-          defaults.clickAside = config.resolve.dismissByClickAside;
-          defaults.keyboard  = config.resolve.dismissByKeyboard;
+
+          // Check for ESC key parameter
+          if(config.resolve.keyboard !== undefined) {
+            defaults.keyboard = config.resolve.keyboard;
+          }
+
+          // Check for backdrop parameter
+          if(config.resolve.backdrop !== undefined) {
+            defaults.backdrop = config.resolve.backdrop;
+          }
+
           var templateAndResolvePromise;
           if(angular.isDefined(config.templateUrl)){
             templateAndResolvePromise = $q.all([fetchTemplate(config.templateUrl)].concat(fetchResolvePromises(config.resolve)));
@@ -147,28 +155,26 @@
             model.$element = content;
             $(htmlElement).addClass('has-open-modal');
 
-            if(defaults.keyboard){
-              bodyElement.bind('keyup',function(e){
-                instance.scope.$apply(function(){
-                  if(e.which === 27){
+            bodyElement.bind('keyup',function(e){
+              instance.scope.$apply(function(){
+                if(e.which === 27){
+                  if(defaults.keyboard){
                     model.dismiss('esc');
                   }
-                });
+                }
               });
-            }
+            });
 
-            if(defaults.clickAside){
-              model.$element.bind('click',function(e){
-                var view = $(this);
-                instance.scope.$apply(function(){
-                  if(e.target === view.get(0)){
-                    if(defaults.backdrop){
-                      model.dismiss('backdrop');
-                    }
+            model.$element.bind('click',function(e){
+              var view = $(this);
+              instance.scope.$apply(function(){
+                if(e.target === view.get(0)){
+                  if(defaults.backdrop){
+                    model.dismiss('backdrop');
                   }
-                });
+                }
               });
-            }
+            });
 
             $animate.enter(content, bodyElement, null);
             openInstance = {element:content,scope:instance.scope};
