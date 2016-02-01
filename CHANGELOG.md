@@ -16,11 +16,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-## [2.0.0] - 2016-01-29
+## [1.1.0] - 2016-02-01
 
 ### Changed
 - Changed the way the modal can be dismissed with the esc key and by clicking aside
-- Updated documentation
 
 
 
