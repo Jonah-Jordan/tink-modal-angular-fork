@@ -1,6 +1,6 @@
 # Tink modal Angular directive
 
-v1.1.0
+v1.1.1
 
 ## What is this repository for?
 
@@ -42,13 +42,12 @@ Create a modal instance in your controller and define a HTML template. As will b
 #### In your HTML:
 
 ```
-<button data-ng-click="openModal()">How does the internet work?</button>
+<button data-ng-click="openModal()">Open modal</button>
 ```
 
 #### In your controller:
 
 ```
-// Angular controller
 angular.module('tinkApp')
   .controller('modalCtrl', ['$scope', '$modal', function(scope, $modal) {
     scope.openModal = function() {
@@ -115,6 +114,9 @@ data-controller | `string` | `''` | The controller you want to inject in the mod
 data-resolve | `object` | `null` | An object with data you want to inject into the controller of the modal.
 
 #### Resolve object options
+
+Attr | Type | Default | Details
+--- | --- | --- | ---
 backdrop | `boolean` | `false` | Whether the modal can be closed by clicking on the backdrop
 keyboard | `boolean` | `true` | Whether the modal can be closed by the ESC key
 
@@ -125,14 +127,26 @@ While it is better practice to use an external template for your modal dialog, i
 #### In your HTML:
 
 ```
-<button tink-modal="" data-tink-modal-template="modalcontentid" data-tink-modal-success="close" data-tink-modal-dismiss="dismissed">Open modal</button>
-...
+<button data-ng-click="openInternalModal()">Open modal</button>
 <script type="text/ng-template" id="modalcontentid">
   <h3>Modal title</h3>
   <p>Modal text</p>
   <button data-ng-click="$dismiss('close')">Dismiss</button>
   <button data-ng-click="$close('close')">Close</button>
 </script>
+```
+
+#### In your controller
+
+```
+angular.module('tinkApp')
+  .controller('modalCtrl', ['$scope', '$modal', function(scope, $modal) {
+    scope.openInternalModal = function() {
+      var modalInstance = $modal.open({
+        templateUrl: 'modalcontentid'
+      });
+    };
+  }
 ```
 
 #### Options

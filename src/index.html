@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<script type="text/ng-template" id="contentTemp.html">
+<script type="text/ng-template" id="contentTemp">
   <h2 class="h4">Bedrijfseenheid aanpassen</h2>
   <div class="form-group">
     <label for="input-name">Naam</label>
@@ -42,7 +42,7 @@
 <script src="bower_components/angular-route/angular-route.js"></script>
 <!-- endbower -->
 
-<script src="scripts/directives/modal.js"></script>
+<!-- <script src="scripts/directives/modal.js"></script> -->
 <script src="scripts/services/modal.js"></script>
 
 <script>
@@ -51,7 +51,7 @@ app.controller('ctrlo',function($scope,$modal){
   $scope.openModal = function() {
       $scope.items = ['item 1','item 2','item 3']
       var modalInstance = $modal.open({
-        templateUrl: 'contentTemp.html',
+        templateUrl: 'contentTemp',
         controller:'ModalInstanceCtrl',
         controllerAs:'ctrl',
         resolve: {
