@@ -18,7 +18,7 @@
       var bodyElement = angular.element($window.document.body);
       var htmlElement = $('html');
 
-        var $modal = {};
+        var $modal = { isOpen: false };
         var options = $modal.$options = angular.extend({}, defaults);
         var linker;
 
@@ -154,6 +154,7 @@
             var content = linker(instance.scope, function() {});
             model.$element = content;
             $(htmlElement).addClass('has-open-modal');
+            $modal.isOpen = true;
 
             bodyElement.bind('keyup',function(e){
               instance.scope.$apply(function(){
@@ -196,6 +197,7 @@
             modal = openInstance;
           }
           $(htmlElement).removeClass('has-open-modal');
+          $modal.isOpen = false;
           $animate.leave(modal.element).then(function() {
             openInstance = null;
             q.resolve('ended');
