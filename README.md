@@ -1,6 +1,6 @@
 # Tink modal Angular directive
 
-v1.1.2
+v1.1.3
 
 ## What is this repository for?
 
@@ -77,7 +77,7 @@ angular.module('tinkApp')
 #### Possible content inside `modal-template.html`:
 
 ```
-<div data-ng-controller="ModalInstanceCtrl">
+<div>
   <h3>Modal title</h3>
   <p>Modal text</p>
   <button data-ng-click="ok()">Dismiss</button>
@@ -90,7 +90,7 @@ angular.module('tinkApp')
 ```
 // Angular controller
 angular.module('tinkApp')
-  .controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 'items' function($scope, $modalInstance, 'items') {
+  .controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 'items', function($scope, $modalInstance, 'items') {
 
     var passFromResolveObj = items;
 
