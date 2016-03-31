@@ -130,19 +130,24 @@
             enterModal(modalInstance,{
               scope:modalScope,
               content: tplAndVars[0],
-              windowTemplateUrl: config.template
+              modalTemplate:config.modalTemplate
             });
           });
           return modalInstance;
         };
 
-        function createModalWindow(content){
+        function createModalWindow(content,modalTemplate){
+            
           var modelView = angular.element('<div class="modal" tabindex="-1" role="dialog">'+
             '<div class="modal-dialog">'+
               '<div class="modal-content">'+
               '</div>'+
             '</div>'+
           '</div>');
+          
+          if(modalTemplate){
+              modelView = angular.element(modalTemplate);
+          }
           modelView.find('.modal-content').html(content);
           return modelView;
         }
@@ -150,7 +155,7 @@
         function enterModal(model,instance){
 
           function show(){
-            var linker = $compile(createModalWindow(instance.content));
+            var linker = $compile(createModalWindow(instance.content,instance.modalTemplate));
             var content = linker(instance.scope, function() {});
             model.$element = content;
             $(htmlElement).addClass('has-open-modal');
