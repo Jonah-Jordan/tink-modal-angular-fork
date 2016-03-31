@@ -1,6 +1,6 @@
 # Tink modal Angular directive
 
-v1.1.3
+v2.0.0
 
 ## What is this repository for?
 
